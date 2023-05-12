@@ -34,7 +34,8 @@ The program can be used to extend the functionality of a program developed to pr
     export PWD=$(pwd)
     echo $PWD
 
-    # Start the Docker Compose services, building necessary images, removing any orphaned containers, and running the containers
+    # Start the Docker Compose services, building necessary images, 
+    # ... removing any orphaned containers, and running the containers
     docker-compose up --build --remove-orphans
     ```
 
