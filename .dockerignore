@@ -1,0 +1,62 @@
+# PowerShell-specific
+*.ps1xml
+*.psd1
+*.psm1
+*.pssc
+*.cdxml
+*.psc1
+*.ps1proj.user
+
+# Visual Studio Code specific files
+.vscode/
+
+# Build output
+bin/
+obj/
+
+# Package files
+*.nupkg
+*.pssproj
+
+# Exclude certain sensitive files
+SensitiveFile.txt
+Secrets/
+config/
+data/
+
+# Exclude user-specific files and folders
+*.userprefs
+*.suo
+*.user
+
+# Exclude logs and debugging files
+*.log
+*.log.*
+*.tmp
+*.swp
+*.bak
+*.cache
+*.vspscc
+*.vssscc
+*.vswp
+*.pdb
+*.zip
+
+# Exclude PowerShell ISE related files
+*.psess
+*.ise
+
+# Exclude NuGet package files
+packages/
+
+# Exclude miscellaneous files
+Thumbs.db
+desktop.ini
+
+# Exclude PowerShell module cache
+ModuleManifest.Cache
+
+# Exclude local configuration files
+app.config.local
+web.config.local
+

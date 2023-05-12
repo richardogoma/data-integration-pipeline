@@ -1,0 +1,63 @@
+digraph DataIntegratorProgram {
+    label=< <B>Digraph: Data Integration Pipeline Control and Data Flow</B> >;
+    node [shape=box];
+    fontname="Helvetica,Arial,sans-serif"
+    color=blue
+    style=dashed
+
+    subgraph cluster_Setup {
+        label=< <B>Setup</B> >;
+        RunDocker [label="Build & Run Docker container", shape="rectangle", style=filled];
+        ReadConfigFile [label="Read config.json file", shape="parallelogram"];
+        UnpackConfigParams [label="Unpack Config Params", shape="rectangle"];
+    }
+
+    subgraph cluster_Staging {
+        label=< <B>Data Staging</B> >;
+        ChangeDataFormat [label="Convert Data Format: CSV -> TSV", shape="rectangle"];
+        CreateSchema [label="Create dynamic temp table schema", shape="rectangle"];
+        StageData [label="Copy raw data to temp table", shape="parallelogram"];
+    }
+
+    subgraph cluster_Integration {
+        label=< <B>Data Integration</B> >;
+        CheckProductionTable [label="Production table exists?", shape="diamond"];
+        TransformStagedData [label="Transform data in staging area", shape="rectangle"];
+        IntegrateData [label="Incrementally load data to production table", shape="rectangle"];
+    }
+
+    subgraph cluster_Logging {
+        label=< <B>Logging</B> >;
+        WriteFunction_DML [label="Log data integration output", shape="rectangle"];
+        WriteFunction_Program [label="Log program's runtime", shape="rectangle"];
+    }
+
+    subgraph cluster_ErrorHandling {
+        label=< <B>Error Handling</B> >;
+        Catch [label="Catch Block", shape="rectangle"];
+        PrintError [label="Print error msg to console", shape="rectangle"];
+    }
+
+    // Connections
+    start -> RunDocker;
+    RunDocker -> ReadConfigFile;
+    ReadConfigFile -> UnpackConfigParams;
+    UnpackConfigParams -> ChangeDataFormat;
+    ChangeDataFormat -> CreateSchema;
+    CreateSchema -> StageData;
+    StageData -> CheckProductionTable;
+    CheckProductionTable -> TransformStagedData [label="Yes"];
+    TransformStagedData -> IntegrateData;
+    IntegrateData -> WriteFunction_DML;
+    WriteFunction_DML -> WriteFunction_Program;
+    ReadConfigFile -> Catch [style=dotted];
+    StageData -> Catch [style=dotted];
+    IntegrateData -> Catch [style=dotted];
+    CheckProductionTable -> Catch [label="No", style=dotted];
+    Catch -> PrintError [style=dotted];
+    PrintError -> WriteFunction_Program [style=dotted];
+    WriteFunction_Program -> end
+    
+    start [shape=oval];
+	end [shape=oval];
+}

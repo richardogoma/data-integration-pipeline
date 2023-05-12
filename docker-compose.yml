@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  data-integrator:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ${PWD}/data:/app/data
+      - ${PWD}/config:/app/config:ro
+      - ${PWD}/log:/app/log
+    container_name: dc_data-integrator
+    image: img_data-integrator
+    restart: on-failure
