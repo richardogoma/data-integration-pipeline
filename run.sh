@@ -21,6 +21,7 @@ docker-compose up --build --remove-orphans -d
 sleep 30
 
 # Invoke sqlcmd in container db
+echo "Run sql commands in terminal ...."
 docker exec -it dc_sql-server-db /opt/mssql-tools/bin/sqlcmd -S $ip_address,1433 -U sa -P <SA_PASSWORD>
 
 timeout 30 
