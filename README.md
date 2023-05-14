@@ -31,28 +31,17 @@ The program can be used to extend the functionality of a program developed to pr
     TABLE=mock_data
     DB_USER=sa
     DATASET=mock_data.csv
-    SQL_SERVER_IP=<sql-server-db-IP-ADDRESS>,<sql-server-db-PORT>
     ```
+* Make sure the <SA_PASSWORD> env variable is the same use in the `run.sh` exec command
 * The input to the program is data in `data\raw` directory
 * The Docker service contract is defined in `docker-compose.yml`
 
     ```bash
-    # Build and run the sql-server-db service
-    docker-compose up -d sql-server-db
+    # Run the data integration service
+    chmod +x run.sh && ./run.sh
     ```
-    ```bash
-    # Print to console sql-server-db-IP-ADDRESS
-    docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' dc_sql-server-db
-    ```
-    ```bash
-    # Print to console sql-server-db-PORT
-    docker inspect -f '{{range $p, $conf := .NetworkSettings.Ports}}{{(index $conf 0).HostPort}} -> {{$p}}{{end}}' dc_sql-server-db
-    ```
-    ```bash
-    # Build and run the data-integrator service
-    docker-compose up --build --remove-orphans -d
-    ```
-
+* See tail of `run.sh` for useful `sql` commands to test the data load status
+        
     > If the program is invoked in another program, considering the use case, the program **should** be architected to egress the input data to `data\raw` directory, and the configuration parameters in `.env` can be programmatically updated using placeholders, especially the `DATASET` and `TABLE` keys. 
     See `src\utils\fxIntegrateStagedData.ps1` and `src\data\transform-data-template.sql` for a use case on programmatically updating text files using placeholders.
 

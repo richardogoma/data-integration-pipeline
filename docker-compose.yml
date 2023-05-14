@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./data:/app/data
-      - ./config:/app/config:ro
+      # - ./config:/app/config:ro
       - ./log:/app/log
     container_name: dc_data-integrator
     environment:
