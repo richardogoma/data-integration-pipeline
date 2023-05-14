@@ -23,23 +23,37 @@ In summary, this program automates the process of integrating data from flat fil
 The program can be used to extend the functionality of a program developed to programmatically extract data from an API endpoint as flat files, and to integrate that data into a central repository to support the data management, analytics and BI systems.
 
 ## Running the program
-* The program's configurations are defined in `config\config.json`. Edit `config\config-template.json` and save as `config.json`
+* The program's configurations is defined in defined the `.env` file in the programs root dir:
+    ```env
+    SA_PASSWORD=<Strong PW>
+    DATABASE=testdb
+    SCHEMA=dbo
+    TABLE=mock_data
+    DB_USER=sa
+    DATASET=mock_data.csv
+    SQL_SERVER_IP=<sql-server-db-IP-ADDRESS>,<sql-server-db-PORT>
+    ```
 * The input to the program is data in `data\raw` directory
 * The Docker service contract is defined in `docker-compose.yml`
 
     ```bash
-    # Based on the Docker service contract
-    # Set the $PWD environment variable to the current directory path 
-    # $env:PWD = (Get-Location).Path    # (Windows PowerShell command)
-    export PWD=$(pwd)
-    echo $PWD
-
-    # Start the Docker Compose services, building necessary images, 
-    # ... removing any orphaned containers, and running the containers
-    docker-compose up --build --remove-orphans
+    # Build and run the sql-server-db service
+    docker-compose up -d sql-server-db
+    ```
+    ```bash
+    # Print to console sql-server-db-IP-ADDRESS
+    docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' dc_sql-server-db
+    ```
+    ```bash
+    # Print to console sql-server-db-PORT
+    docker inspect -f '{{range $p, $conf := .NetworkSettings.Ports}}{{(index $conf 0).HostPort}} -> {{$p}}{{end}}' dc_sql-server-db
+    ```
+    ```bash
+    # Build and run the data-integrator service
+    docker-compose up --build --remove-orphans -d
     ```
 
-    > If the program is invoked in another program, considering the use case, the program **should** be architected to egress the input data to `data\raw` directory, and the configuration parameters in `config\config.json` can be programmatically updated using placeholders, especially the `_dataset` and `Table` keys. 
+    > If the program is invoked in another program, considering the use case, the program **should** be architected to egress the input data to `data\raw` directory, and the configuration parameters in `.env` can be programmatically updated using placeholders, especially the `DATASET` and `TABLE` keys. 
     See `src\utils\fxIntegrateStagedData.ps1` and `src\data\transform-data-template.sql` for a use case on programmatically updating text files using placeholders.
 
 You can also run the program on a Windows OS enviroment without Docker. Execute `./src/DataIntegration.ps1`

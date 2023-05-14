@@ -14,7 +14,7 @@ try {
     $TableName = $env:TABLE
 
     # SQL server credential object
-    $User = $env:USER
+    $User = $env:DB_USER
     $PWord = ConvertTo-SecureString -String $($env:SA_PASSWORD) -AsPlainText -Force
     $SqlCred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord
 

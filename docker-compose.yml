@@ -15,7 +15,7 @@ services:
       DATABASE: ${DATABASE}
       SCHEMA: ${SCHEMA}
       TABLE: ${TABLE}
-      USER: ${USER}
+      DB_USER: ${DB_USER}
       DATASET: ${DATASET}
       SA_PASSWORD: ${SA_PASSWORD}
     image: img_data-integrator
