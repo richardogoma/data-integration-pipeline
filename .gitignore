@@ -22,6 +22,7 @@ obj/
 SensitiveFile.txt
 Secrets/
 config.json
+.env
 
 # Exclude user-specific files and folders
 *.userprefs

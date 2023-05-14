@@ -6,18 +6,16 @@
 #>
 
 try {
-    # Set the configuration parameters for the data integrator program
-    $config = Get-Content "config/config.json" -Raw -ErrorAction Stop | ConvertFrom-Json
-    $rawfilepath = "data/raw/{0}" -f $($config._dataset)
-    $convertedfilepath = "data/processed/{0}" -f $($config._dataset)
-    $InstanceName = $config.db_credentials.Instance
-    $Database = $config.db_credentials.Database
-    $Schema = $config.db_credentials.Schema
-    $TableName = $config.db_credentials.Table
+    $rawfilepath = "data/raw/{0}" -f $($env:DATASET)
+    $convertedfilepath = "data/processed/{0}" -f $($env:DATASET)
+    $InstanceName = $env:SQL_SERVER_IP
+    $Database = $env:DATABASE
+    $Schema = $env:SCHEMA
+    $TableName = $env:TABLE
 
     # SQL server credential object
-    $User = $config.db_credentials.User
-    $PWord = ConvertTo-SecureString -String $($config.db_credentials.Password) -AsPlainText -Force
+    $User = $env:USER
+    $PWord = ConvertTo-SecureString -String $($env:SA_PASSWORD) -AsPlainText -Force
     $SqlCred = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord
 
     # Invoke the data staging function to load data to staging table

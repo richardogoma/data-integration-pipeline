@@ -1,9 +1,9 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 
 # Install curl, powershell, mssql-tools, unixodbc-dev
 RUN apt-get update \
     && apt-get install -y curl \
-    && curl https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb --output packages-microsoft-prod.deb \
+    && curl https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb --output packages-microsoft-prod.deb \
     && dpkg -i packages-microsoft-prod.deb \
     && apt-get update \
     && apt-get install -y powershell \

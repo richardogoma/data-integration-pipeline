@@ -27,4 +27,11 @@ docker stop "containerID" && docker rm "containerID"
 # To remove dangling images in Docker
 docker image prune
 
+#To list running containers:
+docker ps
 
+#To list all containers (including stopped containers):
+docker ps -a
+
+#To list services in a Docker Compose stack:
+docker-compose ps

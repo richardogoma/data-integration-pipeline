@@ -23,6 +23,7 @@ SensitiveFile.txt
 Secrets/
 config/
 data/
+.env
 
 # Exclude user-specific files and folders
 *.userprefs

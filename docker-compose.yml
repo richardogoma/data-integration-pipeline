@@ -6,9 +6,30 @@ services:
       context: ./
       dockerfile: Dockerfile
     volumes:
-      - ${PWD}/data:/app/data
-      - ${PWD}/config:/app/config:ro
-      - ${PWD}/log:/app/log
+      - ./data:/app/data
+      - ./config:/app/config:ro
+      - ./log:/app/log
     container_name: dc_data-integrator
+    environment:
+      SQL_SERVER_IP: ${SQL_SERVER_IP}
+      DATABASE: ${DATABASE}
+      SCHEMA: ${SCHEMA}
+      TABLE: ${TABLE}
+      USER: ${USER}
+      DATASET: ${DATASET}
+      SA_PASSWORD: ${SA_PASSWORD}
     image: img_data-integrator
     restart: on-failure
+    depends_on:
+      - sql-server-db
+
+  sql-server-db:
+    build: 
+      context: ./.db/
+      dockerfile: Dockerfile
+    container_name: dc_sql-server-db
+    environment:
+      SA_PASSWORD: ${SA_PASSWORD}
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
