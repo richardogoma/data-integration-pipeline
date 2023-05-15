@@ -25,14 +25,14 @@ The program can be used to extend the functionality of a program developed to pr
 ## Running the program
 * The program's configurations is defined in defined the `.env` file in the programs root dir:
     ```env
-    SA_PASSWORD=<Strong PW>
+    SA_PASSWORD=#Type_your_strong_password_here
     DATABASE=testdb
     SCHEMA=dbo
     TABLE=mock_data
     DB_USER=sa
     DATASET=mock_data.csv
+    SQL_SERVER_IP=0.0.0.0,1433
     ```
-* Make sure the <SA_PASSWORD> env variable is the same use in the `run.sh` exec command
 * The input to the program is data in `data\raw` directory
 * The Docker service contract is defined in `docker-compose.yml`
 
@@ -44,8 +44,6 @@ The program can be used to extend the functionality of a program developed to pr
         
     > If the program is invoked in another program, considering the use case, the program **should** be architected to egress the input data to `data\raw` directory, and the configuration parameters in `.env` can be programmatically updated using placeholders, especially the `DATASET` and `TABLE` keys. 
     See `src\utils\fxIntegrateStagedData.ps1` and `src\data\transform-data-template.sql` for a use case on programmatically updating text files using placeholders.
-
-You can also run the program on a Windows OS enviroment without Docker. Execute `./src/DataIntegration.ps1`
 
 ## Constraints
 * The source data could either be in `.csv` or `.tsv` file format. These are commonly used file formats for data transport, and they're non-binary files.
