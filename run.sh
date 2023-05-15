@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Build and run the sql-server-db service
-docker-compose up -d sql-server-db
+docker-compose up -d --remove-orphans sql-server-db
 
 sleep 30
 
@@ -19,7 +19,7 @@ port=$(docker inspect -f '{{range $p, $conf := .NetworkSettings.Ports}}{{(index 
 echo "sql-server-db container host port: $port"
 
 # Build and run the data-integrator service
-docker-compose up --build --remove-orphans -d data-integrator
+docker-compose up -d --remove-orphans data-integrator
 
 sleep 30
 
