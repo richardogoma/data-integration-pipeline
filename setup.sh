@@ -1,5 +1,24 @@
 #!/bin/bash
 
+# Create environment variable file for docker-compose environment params
+env_var="SA_PASSWORD=P@s5wOrd
+DATABASE=testdb
+SCHEMA=dbo
+TABLE=mock_data
+DB_USER=sa
+DATASET=mock_data.csv
+SQL_SERVER_IP=0.0.0.0,1433"
+echo "$env_var" > .env
+echo "Environment variables file created in root directory ...."
+
+# Verify that the data/raw dir isn't empty
+if [[ $(find data/raw -mindepth 1 -print -quit) ]]; then
+    echo "data/raw directory is not empty."
+else
+    echo "data/raw directory is empty."
+    exit 1
+fi
+
 # Build and run the sql-server-db service
 docker-compose up -d --remove-orphans sql-server-db
 
@@ -23,26 +42,15 @@ docker-compose up -d --remove-orphans data-integrator
 
 sleep 30
 
-# Set the environment variables defined in the .env file
+# -----------------------------------
+# Set some environment variables defined in the .env file
 eval $(cat .env | grep SA_PASSWORD)
 eval $(cat .env | grep DB_USER)
 
 # Invoke sqlcmd in container db
-echo "Run sql commands in terminal ...."
+echo "Invoking the sqlcmd terminal in sql-server-db service ...."
+echo "See .db/data-load-query.sql for sql command examples to run in terminal ...."
+echo "Press Ctrl + C to terminate the process."
 docker exec -it dc_sql-server-db /opt/mssql-tools/bin/sqlcmd -S $ip_address,$port -U $DB_USER -P $SA_PASSWORD
-
-timeout 30 
-# --------------------------------
-# Run these to confirm data loaded to database table
-# select name from sys.databases;
-# go
-
-# use testdb;
-
-# select name from sys.tables;
-# go
-
-# select top 5 first_name from mock_data;
-# go
 
 # exit

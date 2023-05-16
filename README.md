@@ -3,7 +3,7 @@
 ## Overview
 At a high level, this program represents a data integration pipeline. It takes data from flat files and integrates it into a production table on an SQL Server database. 
 
-<img src="https://github.com/richardogoma/data-integration-pipeline/assets/108296666/22445f16-b39e-4e72-a61a-19eb76764ad1" alt="Digraph: Data Integration Pipeline Data and Control Flow" style="display: block; margin-left: auto; margin-right: auto;" width="500" height="500">
+<img src="https://github.com/richardogoma/data-integration-pipeline/assets/108296666/77d56164-2c96-43bd-87cd-9ff7f1de1728" alt="Digraph: Data Integration Pipeline Data and Control Flow" style="display: block; margin-left: auto; margin-right: auto;" width="500" height="500">
 
 Here is a high-level summary of what the program does:
 
@@ -20,30 +20,18 @@ Here is a high-level summary of what the program does:
 In summary, this program automates the process of integrating data from flat files into a production table on an SQL Server database, handling data staging, transformation, and logging, while also providing error handling capabilities.
 
 ## Use Case
-The program can be used to extend the functionality of a program developed to programmatically extract data from an API endpoint as flat files, and to integrate that data into a central repository to support the data management, analytics and BI systems.
+The program can be used to extend the functionality of a program developed to programmatically extract data from an API endpoint as flat files, and to integrate that data into a repository to support the data management, analytics and BI systems.
 
 ## Running the program
-* The program's configurations is defined in defined the `.env` file in the programs root dir:
-    ```env
-    SA_PASSWORD=#Type_your_strong_password_here
-    DATABASE=testdb
-    SCHEMA=dbo
-    TABLE=mock_data
-    DB_USER=sa
-    DATASET=mock_data.csv
-    SQL_SERVER_IP=0.0.0.0,1433
-    ```
-* The input to the program is data in `data\raw` directory
+* The raw data landing zone is `data\raw` directory
 * The Docker service contract is defined in `docker-compose.yml`
 
     ```bash
-    # Run the data integration service
-    chmod +x run.sh && ./run.sh
+    # Setup and run the data integration service
+    chmod +x setup.sh && ./setup.sh
     ```
-* See tail of `run.sh` for useful `sql` commands to test the data load status
         
-    > If the program is invoked in another program, considering the use case, the program **should** be architected to egress the input data to `data\raw` directory, and the configuration parameters in `.env` can be programmatically updated using placeholders, especially the `DATASET` and `TABLE` keys. 
-    See `src\utils\fxIntegrateStagedData.ps1` and `src\data\transform-data-template.sql` for a use case on programmatically updating text files using placeholders.
+> If the program is invoked in another program, considering the use case, the client program **should** be architected to load data to the raw data landing zone, and the environment variables in `setup.sh` file can be programmatically updated using placeholders.
 
 ## Constraints
 * The source data could either be in `.csv` or `.tsv` file format. These are commonly used file formats for data transport, and they're non-binary files.
@@ -55,7 +43,7 @@ The program can be used to extend the functionality of a program developed to pr
 
     > Uniquely tagging a record can be done with a number (long integer). Text fields require more bytes than numeric fields, so using a number saves considerable space. Please refer to this article on [Primary Key Tips and Techniques](https://www.fmsinc.com/free/newtips/PrimaryKey.asp)
 
-* The production tables have to be created before executing the program with the correct datatypes for each field. 
+* The production tables have to be created before executing the program with the correct datatypes for each field. Refer to `.db/init/init.sql`
 
 * The source data must have an `updated_at` field. This is particularly useful for incrementally loading the data to the production table.
 
