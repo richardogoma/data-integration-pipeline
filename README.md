@@ -1,17 +1,17 @@
-# Data Integration Pipeline
+# Incremental Data Loader
 
 ## Overview
-At a high level, this program represents a data integration pipeline. It takes data from flat files and integrates it into a production table on an SQL Server database. 
+At a high level, this program represents a data integration pipeline. It takes data from flat files and incrementally integrates it into a production table on an SQL Server database. 
 
 <img src="https://github.com/richardogoma/data-integration-pipeline/assets/108296666/77d56164-2c96-43bd-87cd-9ff7f1de1728" alt="Digraph: Data Integration Pipeline Data and Control Flow" style="display: block; margin-left: auto; margin-right: auto;" width="500" height="500">
 
-Here is a high-level summary of what the program does:
+Here is a high-level summary of what the program does: 
 
-1. **Setup**: The program performs initial setup tasks such as creating and running the Docker container for the service, reading the configuration file, and unpacking configuration parameters.
+1. **Setup**: The program performs initial setup tasks such as building and running the Docker services, creating configuration files and verifying the existence of the raw data landing zone.
 
 2. **Data Staging**: The program prepares the data for integration by converting its format from CSV to TSV, creating a dynamic temporary table schema, and bulk copying the raw data into the temporary table.
 
-3. **Data Integration**: The program integrates the staged data into the production table. It checks if the production table exists, and if it does, it proceeds to transform the staged data and incrementally load it into the production table.
+3. **Data Integration**: The program integrates the staged data into the production table. It checks if the production table exists, and if it does, it proceeds to transform the staged data and incrementally load it into the production table, that is, loading only new and updated records only. 
 
 4. **Logging**: The program logs the output of the data integration process and records the program's runtime. It writes the data integration output to a log and also logs the program's runtime.
 
@@ -20,7 +20,7 @@ Here is a high-level summary of what the program does:
 In summary, this program automates the process of integrating data from flat files into a production table on an SQL Server database, handling data staging, transformation, and logging, while also providing error handling capabilities.
 
 ## Use Case
-The program can be used to extend the functionality of a program developed to programmatically extract data from an API endpoint as flat files, and to integrate that data into a repository to support the data management, analytics and BI systems.
+The program can be used to extend the functionality of a program developed to programmatically extract data from an API endpoint as flat files, and to integrate that data into a central repository to support the data management, analytics and BI systems.
 
 ## Running the program
 * The raw data landing zone is `data\raw` directory
@@ -31,7 +31,7 @@ The program can be used to extend the functionality of a program developed to pr
     chmod +x setup.sh && ./setup.sh
     ```
         
-> If the program is invoked in another program, considering the use case, the client program **should** be architected to load data to the raw data landing zone, and the environment variables in `setup.sh` file can be programmatically updated using placeholders.
+> If the program is invoked in another program, considering the use case, the client program should be architected to load data to the raw data landing zone, and the environment variables in `setup.sh` file can be programmatically updated using placeholders.
 
 ## Constraints
 * The source data could either be in `.csv` or `.tsv` file format. These are commonly used file formats for data transport, and they're non-binary files.
